@@ -1,0 +1,97 @@
+-- ****************** SqlDBM: MySQL ******************;
+-- ***************************************************;
+
+
+-- ************************************** `professor`
+
+CREATE TABLE `professor`
+(
+ `id`     numeric NOT NULL ,
+ `codigo` varchar(15) NOT NULL ,
+ `nome`   varchar(30) NOT NULL ,
+
+PRIMARY KEY (`id`)
+);
+
+
+
+
+
+
+-- ************************************** `curso`
+
+CREATE TABLE `curso`
+(
+ `id`        numeric NOT NULL ,
+ `codigo`    varchar(2) NOT NULL ,
+ `descricao` varchar(15) NOT NULL ,
+
+PRIMARY KEY (`id`)
+);
+
+
+
+
+
+
+-- ************************************** `disciplina`
+
+CREATE TABLE `disciplina`
+(
+ `id`           numeric NOT NULL ,
+ `codigo`       varchar(6) NOT NULL ,
+ `decricao`     varchar(15) NOT NULL ,
+ `ementa`       varchar(50) NOT NULL ,
+ `cargaHoraria` double NOT NULL ,
+ `professor`    numeric NOT NULL ,
+
+PRIMARY KEY (`id`),
+KEY `fkIdx_35` (`professor`),
+CONSTRAINT `FK_35` FOREIGN KEY `fkIdx_35` (`professor`) REFERENCES `professor` (`id`)
+);
+
+
+
+
+
+
+-- ************************************** `aluno`
+
+CREATE TABLE `aluno`
+(
+ `id`       numeric NOT NULL ,
+ `codigo`   varchar(15) NOT NULL ,
+ `nome`     varchar(30) NOT NULL ,
+ `endereco` varchar(50) NOT NULL ,
+ `curso`    numeric NOT NULL ,
+
+PRIMARY KEY (`id`),
+KEY `fkIdx_25` (`curso`),
+CONSTRAINT `FK_25` FOREIGN KEY `fkIdx_25` (`curso`) REFERENCES `curso` (`id`)
+);
+
+
+
+
+
+
+-- ************************************** `grade`
+
+CREATE TABLE `grade`
+(
+ `id`         numeric NOT NULL ,
+ `ano`        year NOT NULL ,
+ `curso`      numeric NOT NULL ,
+ `disciplina` numeric NOT NULL ,
+
+PRIMARY KEY (`id`),
+KEY `fkIdx_42` (`curso`),
+CONSTRAINT `FK_42` FOREIGN KEY `fkIdx_42` (`curso`) REFERENCES `curso` (`id`),
+KEY `fkIdx_45` (`disciplina`),
+CONSTRAINT `FK_45` FOREIGN KEY `fkIdx_45` (`disciplina`) REFERENCES `disciplina` (`id`)
+);
+
+
+
+
+
