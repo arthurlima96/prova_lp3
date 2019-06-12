@@ -5,7 +5,7 @@ public class Aluno {
 	private String codigo;
 	private String nome;
 	private String endereco;
-	private Curso curso;
+	private Integer curso;
 	
 	public String getCodigo() {
 		return codigo;
@@ -25,10 +25,10 @@ public class Aluno {
 	public void setEndereco(String endereco) {
 		this.endereco = endereco;
 	}
-	public Curso getCurso() {
+	public Integer getCurso() {
 		return curso;
 	}
-	public void setCurso(Curso curso) {
+	public void setCurso(Integer curso) {
 		this.curso = curso;
 	}
 	

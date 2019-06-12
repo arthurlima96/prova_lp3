@@ -4,7 +4,15 @@ public class Professor {
 
 	private String codigo;
 	private String nome;
+	
+	public Professor() {}
 		
+	public Professor(String codigo, String nome) {
+		super();
+		this.codigo = codigo;
+		this.nome = nome;
+	}
+
 	public String getCodigo() {
 		return codigo;
 	}

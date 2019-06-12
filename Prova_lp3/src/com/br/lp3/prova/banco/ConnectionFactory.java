@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 	
-    private String connection = "jdbc:mysql://localhost:3306/faculdade"; 
+    private String connection = "jdbc:mysql://localhost:3306/faculdade?autoReconnect=true&useSSL=false"; 
     private String user = "root";                  
     private String password = "root";     
     

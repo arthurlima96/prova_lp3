@@ -4,6 +4,19 @@ public class Curso {
 
 	private String codigo;
 	private String descricao;
+		
+	public Curso(String codigo, String descricao) {
+		super();
+		this.codigo = codigo;
+		this.descricao = descricao;
+	}
+		
+	public Curso(String codigo) {
+		super();
+		this.codigo = codigo;
+	}
+		
+	public Curso() {}
 	
 	public String getCodigo() {
 		return codigo;
