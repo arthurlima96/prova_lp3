@@ -64,48 +64,6 @@ public class FormProfDisciplina extends JInternalFrame{
         gbc.weightx = 1;
         pnlMain.add(txtPhone, gbc);
 
-//        JLabel lblEmail = new JLabel("Email");
-//        gbc = new GridBagConstraints();
-//        gbc.fill = GridBagConstraints.HORIZONTAL;
-//        gbc.gridwidth = 1;
-//        gbc.gridx = 0;
-//        gbc.gridy = 2;
-//        gbc.insets = new Insets(0, 10, 0, 0);
-//        gbc.weightx = 1;
-//        pnlMain.add(lblEmail, gbc);
-//
-//        JTextField txtEmail = new JTextField();
-//        gbc = new GridBagConstraints();
-//        gbc.fill = GridBagConstraints.HORIZONTAL;
-//        gbc.gridwidth = 3;
-//        gbc.gridx = 1;
-//        gbc.gridy = 2;
-//        gbc.weightx = 1;
-//        gbc.insets = new Insets(5, 0, 0, 10);
-//        pnlMain.add(txtEmail, gbc);
-//
-//        JLabel lblAddress = new JLabel("Address");
-//        gbc = new GridBagConstraints();
-//        gbc.fill = GridBagConstraints.HORIZONTAL;
-//        gbc.gridwidth = 1;
-//        gbc.gridx = 0;
-//        gbc.gridy = 3;
-//        gbc.insets = new Insets(0, 10, 0, 10);
-//        gbc.weightx = 1;
-//        pnlMain.add(lblAddress, gbc);
-//
-//        JTextArea txtAreaAddress = new JTextArea(10, 20);
-//        JScrollPane pane = new JScrollPane(txtAreaAddress);
-//        gbc = new GridBagConstraints();
-//        gbc.anchor = GridBagConstraints.NORTH;
-//        gbc.fill = GridBagConstraints.BOTH;
-//        gbc.gridx = 1;
-//        gbc.gridy = 3;
-//        gbc.gridwidth = 4;
-//        gbc.insets = new Insets(5, 0, 0, 10);
-//        gbc.weightx = 1;
-//        pnlMain.add(pane, gbc);
-
         JButton btnSave = new JButton("Salvar");
         gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.NONE;

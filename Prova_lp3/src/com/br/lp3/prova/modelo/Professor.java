@@ -2,6 +2,7 @@ package com.br.lp3.prova.modelo;
 
 public class Professor {
 
+	private Integer id;
 	private String codigo;
 	private String nome;
 	
@@ -11,6 +12,14 @@ public class Professor {
 		super();
 		this.codigo = codigo;
 		this.nome = nome;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getCodigo() {

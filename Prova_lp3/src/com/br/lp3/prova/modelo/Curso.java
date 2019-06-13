@@ -2,6 +2,7 @@ package com.br.lp3.prova.modelo;
 
 public class Curso {
 
+	private Integer id;
 	private String codigo;
 	private String descricao;
 		
@@ -17,7 +18,14 @@ public class Curso {
 	}
 		
 	public Curso() {}
-	
+		
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public String getCodigo() {
 		return codigo;
 	}
@@ -37,5 +45,10 @@ public class Curso {
 				+ " `codigo`    varchar(2) NOT NULL ,"
 				+ " `descricao` varchar(15) NOT NULL ,"
 				+ " PRIMARY KEY (`id`));";
+	}
+	
+	@Override
+	public String toString() {
+		return getDescricao();
 	}
 }

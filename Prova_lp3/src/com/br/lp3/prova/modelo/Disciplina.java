@@ -1,13 +1,20 @@
 package com.br.lp3.prova.modelo;
 
 public class Disciplina {
-
+	
+	private Integer id;
 	private String codigo;
 	private String descricao;
 	private String ementa;
 	private Double cargaHoraria;
 	private Professor professor;
 	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public String getCodigo() {
 		return codigo;
 	}
@@ -45,7 +52,7 @@ public class Disciplina {
 				+ " `decricao`     varchar(15) NOT NULL ,"
 				+ " `ementa`       varchar(50) NOT NULL ,"
 				+ " `cargaHoraria` double NOT NULL ,"
-				+ " `professor`    numeric NOT NULL ,"
+				+ " `professor`    numeric,"
 				+ " PRIMARY KEY (`id`),"
 				+ " KEY `fkIdx_35` (`professor`),"
 				+ " CONSTRAINT `FK_35` FOREIGN KEY `fkIdx_35` (`professor`) REFERENCES `professor` (`id`));";

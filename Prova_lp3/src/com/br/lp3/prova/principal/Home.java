@@ -68,12 +68,13 @@ public class Home extends JFrame{
 	     mb.add(menuAjuda);
 	     setJMenuBar(mb);  
 	     
-	     JToolBar toolbar = ToolBarBuilder.iniciaToolBar()
+	    /* JToolBar toolbar = ToolBarBuilder.iniciaToolBar()
 	    		 				.comActionAbrir(null)
 	    		 				.comActionArquivo(null)
 	    		 				.comActionCancelar(null)
 	    		 				.comActionSalvar(null)
-	    		 				.constroi();//new JToolBar();  
+	    		 				.constroi();*/
+		 //new JToolBar();  
          //toolbar.setRollover(true);  
         
          /*JButton btnAluno = new JButton(new ImageIcon(getClass().getResource("/imgs/icons8-mulher-estudante-32.png")));  
@@ -83,9 +84,9 @@ public class Home extends JFrame{
          JButton btnCurso = new JButton(new ImageIcon(getClass().getResource("/imgs/icons8-livro-32.png")));  
          toolbar.add(btnCurso);  
          JButton btnDisciplina = new JButton(new ImageIcon(getClass().getResource("/imgs/icons8-cursos-32.png")));  
-         toolbar.add(btnDisciplina);  */
+         toolbar.add(btnDisciplina);  
          
-         add(toolbar, BorderLayout.SOUTH);
+         add(toolbar, BorderLayout.SOUTH);*/
 	     
 	     this.getContentPane().add(getMdiPane(), BorderLayout.CENTER);
 	     setSize(new Dimension(900, 850)); 

@@ -128,10 +128,7 @@ public class Login extends JFrame{
 					usuarioTxtField.setText("");
 					passwordTxtField.setText("");
 				}
-				
 			}
-
-			
 		});
 	
 	    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.sql.SQLException;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,56 +19,67 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.table.DefaultTableModel;
 
+import com.br.lp3.prova.banco.CrudBD;
+import com.br.lp3.prova.modelo.Aluno;
+import com.br.lp3.prova.modelo.ComboItem;
+import com.br.lp3.prova.modelo.Curso;
+
+import net.miginfocom.swing.MigLayout;
+
 public class FormMatricula extends JInternalFrame{
 
-    private JPanel pnlForm,pnlTable,pnlMain;
+    private JPanel pnlForm;
     private String[] listaCombo = { "Bird", "Cat", "Dog", "Rabbit", "Pig" };
     private  DefaultTableModel model;
   
     public void buildform() {
-        pnlForm = new JPanel();
-        pnlMain = new JPanel(new BorderLayout());
+        pnlForm = new JPanel(new MigLayout("debug","[][grow, fill][]",""));
         
-        GridBagConstraints gbc = new GridBagConstraints();
-
-        JLabel lblName = new JLabel("Aluno");
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(0, 10, 0, 10);
-        pnlForm.add(lblName, gbc);
-
+      
+        JLabel lblName = new JLabel("Aluno");        
+        pnlForm.add(lblName,"width 50:150:150");
         
-        JComboBox<Object> cmbAlunos = new JComboBox<Object>(listaCombo);
-        gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(5, 0, 0, 10);
-        pnlForm.add(cmbAlunos, gbc);
-
-        JLabel lblPhone = new JLabel("Curso");
-        gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 0;
-        gbc.gridy = 1;        
-        gbc.insets = new Insets(0, 10, 0, 10);
-        pnlForm.add(lblPhone, gbc);
-
-        JComboBox<Object> cmbCursos = new JComboBox<Object>(listaCombo);
-        gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.insets = new Insets(5, 0, 0, 10);
-        pnlForm.add(cmbCursos, gbc);
         
-        pnlTable = new JPanel();
+        JComboBox cmbAlunos = new JComboBox();
+        cmbAlunos.removeAllItems();	    
+	    CrudBD cp = new CrudBD();
+		cp.mysqlConnect();
+		try {
+			List<Aluno> alunos =  cp.query(Aluno.class, "aluno", "");
+				cmbAlunos.addItem(new ComboItem("Selecione", 0));
+			for (Aluno aluno : alunos) {
+				cmbAlunos.addItem(aluno);
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}finally {
+			cp.closeConnection();
+		}
+        pnlForm.add(cmbAlunos,"wrap");
+
+        JLabel lblPhone = new JLabel("Curso");        
+        pnlForm.add(lblPhone,"width 50:150:150");
+
+        JComboBox cmbCursos = new JComboBox();  
+        cmbCursos.removeAllItems();	    
+		cp.mysqlConnect();
+		try {
+			List<Curso> cursos =  cp.query(Curso.class, "curso", "");
+				cmbCursos.addItem(new ComboItem("Selecione", 0));
+			for (Curso curso : cursos) {
+				cmbCursos.addItem(curso);
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}finally {
+			cp.closeConnection();
+		}
+        pnlForm.add(cmbCursos,"wrap");
+        
         JTable table = new JTable();
-        //Object [][] dados = {["dado", "dados"],["dado", "dados"]};
         JScrollPane tableContainer = new JScrollPane(table);
         
-		pnlTable.add(tableContainer);
+        pnlForm.add(tableContainer," growx, push, span, wrap");
 
 		model = (DefaultTableModel)table.getModel();
 		model.addColumn("Codigo");
@@ -84,14 +97,10 @@ public class FormMatricula extends JInternalFrame{
         toolbar.add(btnCurso);  
         JButton btnDisciplina = new JButton(new ImageIcon(getClass().getResource("/imgs/icons8-apagar-arquivo-32.png")));  
         toolbar.add(btnDisciplina);  
-
         
         add(toolbar, BorderLayout.NORTH);   
-        pnlMain.add(pnlForm,BorderLayout.NORTH);
-        pnlMain.add(pnlTable,BorderLayout.SOUTH);
-        this.getContentPane().add(pnlMain,BorderLayout.CENTER);
+        this.getContentPane().add(pnlForm);
         
-        //this.getContentPane().add(pnlTable,BorderLayout.SOUTH);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setVisible(true);
