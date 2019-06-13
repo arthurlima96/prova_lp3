@@ -54,13 +54,13 @@ public class Aluno {
 	}
 	public String scriptBD() {
 		return "CREATE TABLE IF NOT EXISTS `aluno` ("
-				+ " `id`       numeric NOT NULL ,"
+				+ " `id`       int NOT NULL AUTO_INCREMENT,"
 				+ " `codigo`   varchar(15) NOT NULL ,"
 				+ " `nome`     varchar(30) NOT NULL ,"
 				+ "	`endereco` varchar(50) NOT NULL ,"
 				+ " `RG` 	   numeric NOT NULL ,"
 				+ " `CPF` 	   numeric NOT NULL ,"
-				+ "	`curso`    numeric,"
+				+ "	`curso`    int,"
 				+ "	PRIMARY KEY (`id`),"
 				+ "	KEY `fkIdx_25` (`curso`),"
 				+ "	CONSTRAINT `FK_25` FOREIGN KEY `fkIdx_25` (`curso`) REFERENCES `curso` (`id`)); ";

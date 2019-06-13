@@ -2,7 +2,7 @@ package com.br.lp3.prova.modelo;
 
 public class Curso {
 
-	private Integer id;
+	//private Integer id;
 	private String codigo;
 	private String descricao;
 		
@@ -19,13 +19,13 @@ public class Curso {
 		
 	public Curso() {}
 		
-	public Integer getId() {
+	/*public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
+	}*/
 	public String getCodigo() {
 		return codigo;
 	}
@@ -41,7 +41,7 @@ public class Curso {
 	
 	public String scriptBD() {
 		return "CREATE TABLE IF NOT EXISTS `curso` ("
-				+ " `id`        numeric NOT NULL ,"
+				+ " `id`        int NOT NULL AUTO_INCREMENT,"
 				+ " `codigo`    varchar(2) NOT NULL ,"
 				+ " `descricao` varchar(15) NOT NULL ,"
 				+ " PRIMARY KEY (`id`));";

@@ -47,12 +47,12 @@ public class Disciplina {
 	}
 	public String scriptBD() {
 		return "CREATE TABLE IF NOT EXISTS `disciplina` ("
-				+ " `id`           numeric NOT NULL ,"
+				+ " `id`           int NOT NULL AUTO_INCREMENT,"
 				+ " `codigo`       varchar(6) NOT NULL , "
 				+ " `decricao`     varchar(15) NOT NULL ,"
 				+ " `ementa`       varchar(50) NOT NULL ,"
 				+ " `cargaHoraria` double NOT NULL ,"
-				+ " `professor`    numeric,"
+				+ " `professor`    int,"
 				+ " PRIMARY KEY (`id`),"
 				+ " KEY `fkIdx_35` (`professor`),"
 				+ " CONSTRAINT `FK_35` FOREIGN KEY `fkIdx_35` (`professor`) REFERENCES `professor` (`id`));";

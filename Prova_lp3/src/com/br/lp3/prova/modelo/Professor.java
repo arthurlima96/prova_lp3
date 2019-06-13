@@ -37,7 +37,7 @@ public class Professor {
 	
 	public String scriptBD() {
 		return "CREATE TABLE IF NOT EXISTS professor("
-				+ " id     numeric NOT NULL ,"
+				+ " id     int NOT NULL AUTO_INCREMENT,"
 				+ " codigo varchar(15) NOT NULL ,"
 				+ " nome   varchar(30) NOT NULL ,"
 				+ " PRIMARY KEY (id));";

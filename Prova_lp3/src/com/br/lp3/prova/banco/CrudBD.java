@@ -63,11 +63,12 @@ public class CrudBD {
 			stmt = this.con.prepareStatement(Sql);
 
 			Field[] fields = zclass.getDeclaredFields();
-			for (int i = 1; i < fields.length; i++) {
+			for (int i = 0; i < fields.length; i++) {
 				Field field = fields[i];
 				field.setAccessible(true);
+
 				Object value = field.get(object);
-				stmt.setObject((i), value);
+				stmt.setObject((i + 1), value);
 			}
 
 			stmt.executeUpdate();

@@ -28,10 +28,10 @@ public class Grade {
 	}	
 	public String scriptBD() {
 		return "CREATE TABLE IF NOT EXISTS `grade`("
-				+ " `id`         numeric NOT NULL ,"
+				+ " `id`        int NOT NULL AUTO_INCREMENT,"
 				+ " `ano`        year NOT NULL ,"
-				+ " `curso`      numeric NOT NULL ,"
-				+ " `disciplina` numeric NOT NULL ,"
+				+ " `curso`      int NOT NULL ,"
+				+ " `disciplina` int NOT NULL ,"
 				+ " PRIMARY KEY (`id`),"
 				+ " KEY `fkIdx_42` (`curso`),"
 				+ " CONSTRAINT `FK_42` FOREIGN KEY `fkIdx_42` (`curso`) REFERENCES `curso` (`id`),"
