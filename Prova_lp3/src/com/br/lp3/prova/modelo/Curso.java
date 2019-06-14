@@ -2,7 +2,7 @@ package com.br.lp3.prova.modelo;
 
 public class Curso {
 
-	//private Integer id;
+	private Integer id;
 	private String codigo;
 	private String descricao;
 		
@@ -19,13 +19,14 @@ public class Curso {
 		
 	public Curso() {}
 		
-	/*public Integer getId() {
+	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
-	}*/
+	}
+	
 	public String getCodigo() {
 		return codigo;
 	}
