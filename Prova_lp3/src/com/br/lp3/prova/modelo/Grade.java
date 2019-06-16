@@ -4,10 +4,18 @@ import java.time.LocalDate;
 
 public class Grade {
 
+	private Integer id;
 	private LocalDate ano;
 	private Curso curso;
 	private Disciplina disciplina;
 	
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public LocalDate getAno() {
 		return ano;
 	}

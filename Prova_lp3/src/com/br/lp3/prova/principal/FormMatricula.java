@@ -5,8 +5,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -17,7 +20,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import com.br.lp3.prova.banco.CrudBD;
 import com.br.lp3.prova.modelo.Aluno;
@@ -30,22 +35,21 @@ public class FormMatricula extends JInternalFrame{
 
     private JPanel pnlForm;
     private String[] listaCombo = { "Bird", "Cat", "Dog", "Rabbit", "Pig" };
-    private  DefaultTableModel model;
-  
+    private DefaultTableModel model;
+    private CrudBD db ;
+    private List<Aluno> alunos;
+    private List<Curso> cursos;
+    
     public void buildform() {
         pnlForm = new JPanel(new MigLayout("debug","[][grow, fill][]",""));
-        
-      
         JLabel lblName = new JLabel("Aluno");        
         pnlForm.add(lblName,"width 50:150:150");
-        
-        
         JComboBox cmbAlunos = new JComboBox();
         cmbAlunos.removeAllItems();	    
-	    CrudBD cp = new CrudBD();
-		cp.mysqlConnect();
+	   
+		db.mysqlConnect();
 		try {
-			List<Aluno> alunos =  cp.query(Aluno.class, "aluno", "");
+			    alunos =  db.query(Aluno.class, "aluno", "");
 				cmbAlunos.addItem(new ComboItem("Selecione", 0));
 			for (Aluno aluno : alunos) {
 				cmbAlunos.addItem(aluno);
@@ -53,7 +57,7 @@ public class FormMatricula extends JInternalFrame{
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}finally {
-			cp.closeConnection();
+			db.closeConnection();
 		}
         pnlForm.add(cmbAlunos,"wrap");
 
@@ -62,9 +66,9 @@ public class FormMatricula extends JInternalFrame{
 
         JComboBox cmbCursos = new JComboBox();  
         cmbCursos.removeAllItems();	    
-		cp.mysqlConnect();
+		db.mysqlConnect();
 		try {
-			List<Curso> cursos =  cp.query(Curso.class, "curso", "");
+			cursos =  db.query(Curso.class, "curso", "");
 				cmbCursos.addItem(new ComboItem("Selecione", 0));
 			for (Curso curso : cursos) {
 				cmbCursos.addItem(curso);
@@ -72,20 +76,11 @@ public class FormMatricula extends JInternalFrame{
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}finally {
-			cp.closeConnection();
+			db.closeConnection();
 		}
         pnlForm.add(cmbCursos,"wrap");
+        pnlForm.add(exibirTable()," growx, push, span, wrap");
         
-        JTable table = new JTable();
-        JScrollPane tableContainer = new JScrollPane(table);
-        
-        pnlForm.add(tableContainer," growx, push, span, wrap");
-
-		model = (DefaultTableModel)table.getModel();
-		model.addColumn("Codigo");
-		model.addColumn("Aluno");
-        
-				
         JToolBar toolbar = new JToolBar();  
         toolbar.setRollover(true);  
        
@@ -106,15 +101,74 @@ public class FormMatricula extends JInternalFrame{
         this.setVisible(true);
 
     }
-    
-    private void buildTable() {
-    	
+
+	private JScrollPane exibirTable() {
+		TableModel model = carregarTable();
+	    JTable table = new JTable(model);
+	    JScrollPane scrollPane = new JScrollPane(table);
+		return scrollPane;
 	}
 
+	private TableModel carregarTable() {
+		TableModel model = new AbstractTableModel() {
+
+            List<Aluno> alunos = FormMatricula.this.alunos;
+            
+            String columnNames[] = { "Aluno", "Curso"};
+
+            public int getColumnCount() {
+              return columnNames.length;
+            }
+
+			public String getColumnName(int column) {
+              return columnNames[column];
+            }
+
+            public int getRowCount() {
+              return alunos.size();
+            }
+
+            public Object getValueAt(int row, int column) {
+            	 switch (column) {
+                 case 0:
+                     return this.alunos.get(row).getNome();
+                 case 1:
+                     return pegarCurso(this.alunos.get(row).getCurso());
+                 default:
+                     return "-";
+             }
+            }
+
+            
+            private Object pegarCurso(Integer curso_id) {
+				for (Curso curso : cursos) {
+					if(curso.getId().equals(curso_id)){
+						return curso.getDescricao();
+					}
+				}
+				return "Não Matriculado";
+			}
+
+			private List<Aluno> getAlunos() {
+            	db.mysqlConnect();
+        		try {
+        			List<Aluno> alunos =  db.query(Aluno.class, "aluno","");
+        		} catch (SQLException e1) {
+        			e1.printStackTrace();
+        		}finally {
+        			db.closeConnection();
+        		}
+				return alunos;
+			}
+          };
+		return model;
+	}
+	
 	public FormMatricula(String titulo, boolean b, boolean c, boolean d, boolean e) {
 		super(titulo, b, c, d, e);
+		db = new CrudBD();
 		this.buildform();
-		this.buildTable();
+		
 	}
 
 }
