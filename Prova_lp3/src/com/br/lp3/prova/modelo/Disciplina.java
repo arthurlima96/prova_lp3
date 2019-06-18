@@ -49,7 +49,7 @@ public class Disciplina {
 		return "CREATE TABLE IF NOT EXISTS `disciplina` ("
 				+ " `id`           int NOT NULL AUTO_INCREMENT,"
 				+ " `codigo`       varchar(6) NOT NULL , "
-				+ " `decricao`     varchar(15) NOT NULL ,"
+				+ " `descricao`     varchar(15) NOT NULL ,"
 				+ " `ementa`       varchar(50) NOT NULL ,"
 				+ " `cargaHoraria` double NOT NULL ,"
 				+ " `professor`    int,"
