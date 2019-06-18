@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -34,11 +37,18 @@ import net.miginfocom.swing.MigLayout;
 public class FormMatricula extends JInternalFrame{
 
     private JPanel pnlForm;
-    private String[] listaCombo = { "Bird", "Cat", "Dog", "Rabbit", "Pig" };
-    private DefaultTableModel model;
     private CrudBD db ;
     private List<Aluno> alunos;
     private List<Curso> cursos;
+    private TableModel model ;
+    private JTable table;
+    private JScrollPane scrollPane;
+
+	public FormMatricula(String titulo, boolean b, boolean c, boolean d, boolean e) {
+		super(titulo, b, c, d, e);
+		db = new CrudBD();
+		this.buildform();
+	}
     
     public void buildform() {
         pnlForm = new JPanel(new MigLayout("debug","[][grow, fill][]",""));
@@ -52,7 +62,7 @@ public class FormMatricula extends JInternalFrame{
 			    alunos =  db.query(Aluno.class, "aluno", "");
 				cmbAlunos.addItem(new ComboItem("Selecione", 0));
 			for (Aluno aluno : alunos) {
-				cmbAlunos.addItem(aluno);
+				cmbAlunos.addItem(new ComboItem(aluno.getNome(), aluno.getId()));
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -71,7 +81,7 @@ public class FormMatricula extends JInternalFrame{
 			cursos =  db.query(Curso.class, "curso", "");
 				cmbCursos.addItem(new ComboItem("Selecione", 0));
 			for (Curso curso : cursos) {
-				cmbCursos.addItem(curso);
+				cmbCursos.addItem(new ComboItem(curso.getDescricao(), curso.getId()));
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -79,19 +89,20 @@ public class FormMatricula extends JInternalFrame{
 			db.closeConnection();
 		}
         pnlForm.add(cmbCursos,"wrap");
-        pnlForm.add(exibirTable()," growx, push, span, wrap");
+        exibirTable();
+        pnlForm.add(scrollPane," growx, push, span, wrap");
         
         JToolBar toolbar = new JToolBar();  
         toolbar.setRollover(true);  
-       
-        JButton btnAluno = new JButton(new ImageIcon(getClass().getResource("/imgs/icons8-adicionar-arquivo-32.png")));  
-        toolbar.add(btnAluno);  
-        JButton btnProfessor = new JButton(new ImageIcon(getClass().getResource("/imgs/icons8-editar-arquivo-32.png")));  
-        toolbar.add(btnProfessor);  
-        JButton btnCurso = new JButton(new ImageIcon(getClass().getResource("/imgs/icons8-salvar-arquivo-32.png")));  
-        toolbar.add(btnCurso);  
-        JButton btnDisciplina = new JButton(new ImageIcon(getClass().getResource("/imgs/icons8-apagar-arquivo-32.png")));  
-        toolbar.add(btnDisciplina);  
+              
+        JButton btnAdicionar = new JButton(new ImageIcon(getClass().getResource("/imgs/icons8-adicionar-arquivo-32.png")));  
+        toolbar.add(btnAdicionar);  
+        JButton btnEditar = new JButton(new ImageIcon(getClass().getResource("/imgs/icons8-editar-arquivo-32.png")));  
+        toolbar.add(btnEditar);  
+        JButton btnSalvar = new JButton(new ImageIcon(getClass().getResource("/imgs/icons8-salvar-arquivo-32.png")));  
+        toolbar.add(btnSalvar);  
+        JButton btnApagar = new JButton(new ImageIcon(getClass().getResource("/imgs/icons8-apagar-arquivo-32.png")));  
+        toolbar.add(btnApagar);
         
         add(toolbar, BorderLayout.NORTH);   
         this.getContentPane().add(pnlForm);
@@ -99,14 +110,41 @@ public class FormMatricula extends JInternalFrame{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setVisible(true);
+        
+        btnSalvar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				try {					
+					
+					Object itemCurso = cmbCursos.getSelectedItem();
+					Integer codCurso = ((ComboItem)itemCurso).getId();
+					
+					Object itemAluno = cmbAlunos.getSelectedItem();
+					Integer codAluno = ((ComboItem)itemAluno).getId();
+					
+					Aluno aluno = pegarAluno(codAluno);					
+					aluno.setCurso(codCurso);
+					
+					CrudBD cp = new CrudBD();
+					cp.mysqlConnect();
+					cp.createUpdatePreparedStatement(aluno,"aluno","id");
+					cp.closeConnection();
+					JOptionPane.showMessageDialog(null, "Salvou com sucesso !");
+					table.setModel(carregarTable());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Error ao salvar !");
+				}
+			}
+		});
 
     }
 
-	private JScrollPane exibirTable() {
-		TableModel model = carregarTable();
-	    JTable table = new JTable(model);
-	    JScrollPane scrollPane = new JScrollPane(table);
-		return scrollPane;
+	private void exibirTable() {
+		model = carregarTable();
+	    table = new JTable(model);
+	    scrollPane = new JScrollPane(table);
 	}
 
 	private TableModel carregarTable() {
@@ -164,11 +202,12 @@ public class FormMatricula extends JInternalFrame{
 		return model;
 	}
 	
-	public FormMatricula(String titulo, boolean b, boolean c, boolean d, boolean e) {
-		super(titulo, b, c, d, e);
-		db = new CrudBD();
-		this.buildform();
-		
+	public Aluno pegarAluno(Integer id){
+		for (Aluno aluno : alunos) {
+			if(aluno.getId().equals(id)) {
+				return aluno;
+			}
+		}
+		return null;
 	}
-
 }

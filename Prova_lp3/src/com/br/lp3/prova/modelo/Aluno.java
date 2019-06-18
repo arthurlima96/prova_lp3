@@ -1,5 +1,7 @@
 package com.br.lp3.prova.modelo;
 
+import javax.annotation.Generated;
+
 public class Aluno {
 
 	private Integer id;
@@ -65,5 +67,10 @@ public class Aluno {
 				+ "	KEY `fkIdx_25` (`curso`),"
 				+ "	CONSTRAINT `FK_25` FOREIGN KEY `fkIdx_25` (`curso`) REFERENCES `curso` (`id`)); ";
 
+	}
+	
+	@Override
+	public String toString() {
+		return getNome();
 	}
 }

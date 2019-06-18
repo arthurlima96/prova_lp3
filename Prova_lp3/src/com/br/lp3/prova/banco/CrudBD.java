@@ -88,7 +88,8 @@ public class CrudBD {
 
 		for (Field field : zclass.getDeclaredFields()) {
 			String name = field.getName();
-			if (field.getName().equals("id")) continue;
+			if (field.getName().equals("id"))
+				continue;
 			if (fields.length() > 1) {
 				fields.append(",");
 				vars.append(",");
@@ -102,8 +103,7 @@ public class CrudBD {
 		return Sql;
 	}
 
-	public <T> List<T> query( Class<T> type, String tableName, String where)
-			throws SQLException {
+	public <T> List<T> query(Class<T> type, String tableName, String where) throws SQLException {
 		List<T> list = new ArrayList<T>();
 		String table = tableName;
 		String Sql = "SELECT * FROM " + table;
@@ -125,7 +125,8 @@ public class CrudBD {
 		return list;
 	}
 
-	public void loadResultSetIntoObject(ResultSet rst, Object object) throws IllegalArgumentException, IllegalAccessException, SQLException {
+	public void loadResultSetIntoObject(ResultSet rst, Object object)
+			throws IllegalArgumentException, IllegalAccessException, SQLException {
 		Class<?> zclass = object.getClass();
 		for (Field field : zclass.getDeclaredFields()) {
 			String name = field.getName();
@@ -139,31 +140,93 @@ public class CrudBD {
 			field.set(object, value);
 		}
 	}
-	
-	public boolean isPrimitive(Class<?> type)
-	{
-	     return (type==int.class || type==long.class ||
-	             type==double.class  || type==float.class
-	            || type==boolean.class || type==byte.class
-	            || type==char.class || type==short.class);
+
+	public boolean isPrimitive(Class<?> type) {
+		return (type == int.class || type == long.class || type == double.class || type == float.class
+				|| type == boolean.class || type == byte.class || type == char.class || type == short.class);
 	}
-	 
-	 public Class<?> boxPrimitiveClass(Class<?> type)
-	 {
-	     if(type==int.class){return Integer.class;}
-	     else if(type==long.class){return Long.class;}
-	     else if (type==double.class){return Double.class;}
-	     else if(type==float.class){return Float.class;}
-	     else if(type==boolean.class){return Boolean.class;}
-	     else if(type==byte.class){return Byte.class;}
-	     else if(type==char.class){return Character.class;}
-	     else if(type==short.class){return Short.class;}
-	     else
-	     {
-	         String string="class '" + type.getName() + "' is not a primitive";
-	         throw new IllegalArgumentException(string);
-	     }
-	 }
+
+	public Class<?> boxPrimitiveClass(Class<?> type) {
+		if (type == int.class) {
+			return Integer.class;
+		} else if (type == long.class) {
+			return Long.class;
+		} else if (type == double.class) {
+			return Double.class;
+		} else if (type == float.class) {
+			return Float.class;
+		} else if (type == boolean.class) {
+			return Boolean.class;
+		} else if (type == byte.class) {
+			return Byte.class;
+		} else if (type == char.class) {
+			return Character.class;
+		} else if (type == short.class) {
+			return Short.class;
+		} else {
+			String string = "class '" + type.getName() + "' is not a primitive";
+			throw new IllegalArgumentException(string);
+		}
+	}
+
+	public String createUpdateStatementSql(Class<?> zclass, String tableName, String primaryKey) {
+		StringBuilder sets = new StringBuilder();
+		String where = null;
+
+		for (Field field : zclass.getDeclaredFields()) {
+			String name = field.getName();
+			String pair = name + " = ?";
+			if (name.equals(primaryKey)) {
+				where = " WHERE " + pair;
+			} else {
+				if (sets.length() > 1) {
+					sets.append(", ");
+				}
+				sets.append(pair);
+			}
+		}
+		if (where == null) {
+			String string = "Primary key not found in '" + zclass.getName() + "'";
+			throw new IllegalArgumentException(string);
+		}
+
+		String table = tableName;
+		String Sql = "UPDATE " + table + " SET " + sets.toString() + where;
+
+		return Sql;
+	}
+
+	public void createUpdatePreparedStatement(Object object, String tableName,String primaryKey) throws SQLException {
+		PreparedStatement stmt = null;
+
+		try {
+			Class<?> zclass = object.getClass();
+
+			String Sql = createUpdateStatementSql(zclass, tableName, primaryKey);
+			System.out.println(Sql);
+			stmt = con.prepareStatement(Sql);
+
+			Field[] fields = zclass.getDeclaredFields();
+			int pkSequence = fields.length;
+
+			for (int i = 0; i < fields.length; i++) {
+				Field field = fields[i];
+				field.setAccessible(true);
+				Object value = field.get(object);
+
+				String name = field.getName();
+				if (name.equals(primaryKey)) {
+					stmt.setObject(pkSequence, value);
+				} else {
+					stmt.setObject(i, value);
+				}
+			}
+		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			String string = "Unable to create PreparedStatement: " + e.getMessage();
+			throw new RuntimeException(string, e);
+		}
+		stmt.executeUpdate();
+	}
 
 	public void insertData(String word, String meaning, String synonyms, String antonyms) {
 		try {

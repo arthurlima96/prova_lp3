@@ -59,25 +59,6 @@ public class FormAluno extends JInternalFrame{
 		panel.add(new JLabel("CPF:"),"right");
 		JTextField txtCPF = new JTextField(30);
 		panel.add(txtCPF,"span, growx");
-		
-		panel.add(new JLabel("Curso:"),"right");
-		JComboBox cmbCurso = new JComboBox();
-	    cmbCurso.setPreferredSize(new Dimension(200,10));
-	    cmbCurso.removeAllItems();	    
-	    CrudBD cp = new CrudBD();
-		cp.mysqlConnect();
-		try {
-			List<Curso> cursos =  cp.query(Curso.class, "curso", "");
-				cmbCurso.addItem(new ComboItem("Selecione", 0));
-			for (Curso curso : cursos) {
-				cmbCurso.addItem(curso);
-			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}finally {
-			cp.closeConnection();
-		}
-		panel.add(cmbCurso,"span, growx");
 				           
         JToolBar toolbar = new JToolBar();  
         toolbar.setRollover(true);  
@@ -109,9 +90,6 @@ public class FormAluno extends JInternalFrame{
 					aluno.setEndereco(txtAreaEndereco.getText());
 					aluno.setRG(Integer.valueOf(txtRG.getText()));
 					aluno.setCPF(Integer.valueOf(txtCPF.getText()));
-					Object item = cmbCurso.getSelectedItem();
-					Integer id = ((ComboItem)item).getId();
-					aluno.setCurso(id);
 					CrudBD cp = new CrudBD();
 					cp.mysqlConnect();
 					cp.createInsertPreparedStatement(aluno,"aluno");
@@ -145,7 +123,6 @@ public class FormAluno extends JInternalFrame{
 				txtTelefone.setText("");
 				txtRG.setText("");
 				txtCPF.setText("");
-				cmbCurso.setSelectedIndex(0);
 			}
 		});
         
